@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Server Script Processing</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Server Script Processing</h1>
+        <div class="form">
+            <label for="versionSelect" class="label">Версия</label>
+            <select id="versionSelect" class="select">
+                <option value="1">Оригинальная</option>
+                <option value="2">V2</option>
+            </select>
+            <label for="fileInput" class="label">Файл для обработки</label>
+            <input type="file" id="fileInput" class="file-input">
+            <button class="button">Загрузить</button>
+        </div>
+
+        <div class="image-section">
+            <div class="image-block">
+                <img src="step1.jpg" alt="Исходное изображение" class="image">
+                <p class="description">Исходное изображение</p>
+            </div>
+            <div class="image-block">
+                <img src="step2.jpg" alt="Очищенное изображение" class="image">
+                <p class="description">Очищенное изображение</p>
+            </div>
+            <div class="image-block">
+                <img src="step3.jpg" alt="Палитра" class="image">
+                <p class="description">Палитра</p>
+            </div>
+        </div>
+
+        <div class="color-palette">
+            <div class="color-block">
+                <div class="color" style="background-color: #ff0000;">
+                    <p class="color__code">#FF0000</p>
+                </div>
+            </div>
+            <div class="color-block">
+                <div class="color" style="background-color: #00ff00;">
+                    <p class="color__code">#00FF00</p>
+                </div>
+            </div>
+            <div class="color-block">
+                <div class="color" style="background-color: #0000ff;">
+                    <p class="color__code">#0000FF</p>
+                </div>
+            </div>
+            <div class="color-block">
+                <div class="color" style="background-color: #ffff00;">
+                    <p class="color__code">#FFFF00</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,17 @@
+{
+    "name": "asboldyrev/ya-colors",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Asboldyrev\\YaColors\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "asboldyrev",
+            "email": "angelcorpc@ya.ru"
+        }
+    ],
+    "require": {}
+}
