@@ -43,25 +43,26 @@
 }
 
 .color-palette {
+    width: 200px;
     display: grid;
-    justify-content: center;
-    grid-template-columns: repeat(4, 1fr);
-    grid-gap: 0;
+    justify-content: start;
+    grid-template-columns: repeat(2, 1fr);
 }
 
 .color-block {
     display: grid;
-    justify-content: center;
-    align-items: center;
+    justify-content: start;
 }
 
 .color {
-    width: 80px;
-    height: 80px;
-    border: 1px solid #000;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 100px;
     margin-bottom: 0;
 }
 
-.color-code {
-    margin: 0;
+img {
+    max-width: 200px;
 }

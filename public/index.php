@@ -13,6 +13,10 @@
 
 $app = require __DIR__.'/../bootstrap/app.php';
 
+$app->configure('app');
+$app->configure('filesystems');
+
+$app->withFacades();
 /*
 |--------------------------------------------------------------------------
 | Run The Application

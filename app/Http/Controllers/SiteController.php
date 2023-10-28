@@ -16,6 +16,8 @@ class SiteController extends Controller
     {
         $result = Handler::make($request->file('file'), $request->input('version'));
 
-        dd($result);
+        return view('result')
+            ->with('images', $result->getImages())
+            ->with('palette', $result->getPalette());
     }
 }
