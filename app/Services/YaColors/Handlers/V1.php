@@ -12,9 +12,9 @@ class V1 extends AbstractHandler
      */
     protected $originalImage;
 
-    public function __construct(UploadedFile $file)
+    public static function make(UploadedFile $file)
     {
-        return parent::__construct($file, 'v1');
+        return parent::create($file, 'v1');
     }
 
     protected function createPalette(Imagick $image): Imagick

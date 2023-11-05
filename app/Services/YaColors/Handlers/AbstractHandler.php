@@ -16,17 +16,42 @@ abstract class AbstractHandler
 
     protected array $images;
 
-    public function __construct(UploadedFile $file, protected string $versionPrefix)
+    protected function __construct(public readonly string $id, protected $versionPrefix)
     {
-        $stored_file = $file->move(storage_path('ya-colors/'.$this->versionPrefix), $file->getClientOriginalName());
-        $this->filename = $stored_file->getFilename();
+
+    }
+
+    protected static function create(UploadedFile $file, string $versionPrefix)
+    {
+        $handler = new self(Str::uuid(), $versionPrefix, $file);
+
+        $stored_file = $file->move(storage_path('ya-colors/'.$handler->versionPrefix.'/'.$handler->id), $file->getClientOriginalName());
+        $handler->filename = $stored_file->getFilename();
 
         $original_image = new Imagick($stored_file->getPathname());
-        $this->saveImage($original_image, 'original');
-        $cleaned_image = $this->cleanImage($original_image);
-        $this->createPalette($cleaned_image);
+        $handler->saveImage($original_image, 'original');
+        $cleaned_image = $handler->cleanImage($original_image);
+        $handler->createPalette($cleaned_image);
 
-        return $this;
+        return $handler;
+    }
+
+    public static function load(int $version, string $id)
+    {
+        $version_prefix = 'v'.$version;
+        // $handler = new self($id, $version_prefix);
+        dd(Storage::drive('public')->exists($version_prefix.'/'.$id.'/'));
+        // $this->id = Str::uuid();
+
+        // $stored_file = $file->move(storage_path('ya-colors/'.$this->versionPrefix.'/'.$this->id), $file->getClientOriginalName());
+        // $this->filename = $stored_file->getFilename();
+
+        // $original_image = new Imagick($stored_file->getPathname());
+        // $this->saveImage($original_image, 'original');
+        // $cleaned_image = $this->cleanImage($original_image);
+        // $this->createPalette($cleaned_image);
+
+        // return $this;
     }
 
     public function getImages()
@@ -92,15 +117,15 @@ abstract class AbstractHandler
         $filename = pathinfo($this->filename, PATHINFO_FILENAME);
         $extension = pathinfo($this->filename, PATHINFO_EXTENSION);
 
-        $this->images[$postfix] = '/media/'.$this->versionPrefix.'/'.Str::slug($filename).'/'.Str::slug($filename).'-'.$postfix.'.'.$extension;
+        $this->images[$postfix] = '/media/'.$this->versionPrefix.'/'.$this->id.'/'.Str::slug($filename).'-'.$postfix.'.'.$extension;
 
-        Storage::drive('public')->put($this->versionPrefix.'/'.Str::slug($filename).'/'.Str::slug($filename).'-'.$postfix.'.'.$extension, $image);
+        Storage::drive('public')->put($this->versionPrefix.'/'.$this->id.'/'.Str::slug($filename).'-'.$postfix.'.'.$extension, $image);
     }
 
     protected function saveFile(mixed $data, string $filename): void
     {
         $filename = pathinfo($this->filename, PATHINFO_FILENAME);
 
-        Storage::drive('public')->put($this->versionPrefix.'/'.Str::slug($filename).'/'.$filename, $data);
+        Storage::drive('public')->put($this->versionPrefix.'/'.$this->id.'/'.$filename, $data);
     }
 }

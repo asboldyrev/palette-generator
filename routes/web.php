@@ -15,6 +15,11 @@
 
 $router->get('/', 'SiteController@index');
 
+$router->get('result/{version}/{id}', [
+    'as' => 'result',
+    'uses' => 'SiteController@result',
+]);
+
 $router->post('/', [
     'as' => 'store',
     'uses' => 'SiteController@store',
