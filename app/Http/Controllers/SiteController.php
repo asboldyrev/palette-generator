@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\YaColors\Handler;
+use App\Services\YaColors\ImageModel;
 use Illuminate\Http\Request;
 
 class SiteController extends Controller
@@ -14,20 +14,16 @@ class SiteController extends Controller
 
     public function store(Request $request)
     {
-        $version = $request->input('version');
+        $file = $request->file('file');
+        $result = ImageModel::create($file);
 
-        $result = Handler::make($request->file('file'), $version);
-
-        return redirect()->route('result', ['id' => $result->id, 'version' => $version]);
+        return redirect()->route('result', ['id' => $result->id]);
     }
 
-    public function result(int $version, string $id)
+    public function result(string $id)
     {
-        $result = Handler::load($version, $id);
-        dd($version, $id, $result);
+        $image = ImageModel::load($id);
 
-        return view('result')
-            ->with('images', $result->getImages())
-            ->with('palette', $result->getPalette());
+        return view('result')->with('image', $image);
     }
 }

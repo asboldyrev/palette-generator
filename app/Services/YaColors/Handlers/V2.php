@@ -2,12 +2,13 @@
 
 namespace App\Services\YaColors\Handlers;
 
-use Illuminate\Http\UploadedFile;
+use App\Services\YaColors\HandlerInterface;
+use Imagick;
 
-class V2
+class V2 implements HandlerInterface
 {
-    public function __construct(UploadedFile $file)
+    public function createPalette(Imagick $image): array
     {
-        dd($file);
+        dd($image);
     }
 }
