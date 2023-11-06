@@ -15,9 +15,9 @@ class SiteController extends Controller
     public function store(Request $request)
     {
         $file = $request->file('file');
-        $result = ImageModel::create($file);
+        $image = ImageModel::create($file);
 
-        return redirect()->route('result', ['id' => $result->id]);
+        return redirect()->route('result', ['id' => $image->id]);
     }
 
     public function result(string $id)
