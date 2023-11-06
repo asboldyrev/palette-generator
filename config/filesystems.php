@@ -57,7 +57,7 @@ return [
 
         'tmp_media' => [
             'driver' => 'local',
-            'root' => storage_path('ya-colors'),
+            'root' => storage_path('tmp_media'),
         ],
 
         'public_media' => [

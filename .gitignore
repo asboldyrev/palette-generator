@@ -4,6 +4,6 @@ Homestead.json
 Homestead.yaml
 .env
 .phpunit.result.cache
-storage/ya-colors/
+storage/tmp_media/
 storage/backups/
 public/media/
