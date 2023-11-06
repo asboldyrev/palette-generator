@@ -15,7 +15,7 @@
 			<form class="form" action="{{ route('store') }}" method="post" enctype="multipart/form-data">
 				<label class="label" for="versionSelect">Алгоритм</label>
 				<select class="select" id="versionSelect" name="version">
-					<option value="1">V1 (Оригинальная от Яндекса)</option>
+					<option value="1">V1 (Оригинальный от Яндекса)</option>
 					<option value="2">V2</option>
 				</select>
 				<label class="label" for="fileInput">Файл для обработки</label>
