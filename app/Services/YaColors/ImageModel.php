@@ -2,6 +2,8 @@
 
 namespace App\Services\YaColors;
 
+use App\Services\YaColors\Exceptions\ImageNotFoundException;
+use App\Services\YaColors\Exceptions\ModelNotFoundException;
 use App\Services\YaColors\Handlers\V1;
 use App\Services\YaColors\Handlers\V2;
 use Exception;
@@ -23,18 +25,28 @@ class ImageModel
 
     protected string $version;
 
+    protected string $originalImage;
+
+    protected string $cleanedImage;
+
     protected array $images;
 
     protected array $palette;
 
     public static function create(UploadedFile $file, string $version = 'v1'): self
     {
-        $model = new self();
+        $id = Str::uuid();
+        try {
+            $model = self::load($id);
+        } catch (ModelNotFoundException) {
+            $model = new self();
+            $model->id = $id;
+        }
+
         $pathinfo = pathinfo($file->getClientOriginalName());
         $model->extension = $pathinfo['extension'];
         $model->filename = Str::slug($pathinfo['filename']);
         $model->basename = $model->filename . '.' . $model->extension;
-        $model->id = Str::uuid();
         $model->version = $version;
 
         $stored_filename = $file->storeAs(
@@ -45,13 +57,13 @@ class ImageModel
         $stored_filepath = Storage::disk('tmp_media')->path($stored_filename);
 
         $original_image = new Imagick($stored_filepath);
-        $model->saveImage($original_image, 'original');
+        $model->originalImage = $model->saveImage($original_image, 'original');
 
         $cleaned_image = $model->cleanImage($original_image);
-        $model->saveImage($cleaned_image, 'cleaned');
+        $model->cleanedImage = $model->saveImage($cleaned_image, 'cleaned');
 
         $palette_image = $model->createPalette($cleaned_image);
-        $model->saveImage($palette_image, 'palette');
+        $model->images[$version] = $model->saveImage($palette_image, 'palette-' . $version);
 
         $model->saveData();
 
@@ -64,18 +76,42 @@ class ImageModel
             $data = Storage::disk('public_media')->json($id . '/data.json');
 
             $model = new self();
-            $model->extension = $data['extension'];
-            $model->filename = $data['filename'];
-            $model->basename = $data['basename'];
-            $model->id = $data['id'];
-            $model->version = $data['version'];
-            $model->images = $data['images'];
-            $model->palette = $data['palette'];
+            foreach ($data as $param_name => $param_value) {
+                if (property_exists($model, $param_name)) {
+                    $model->{$param_name} = $param_value;
+                }
+            }
 
             return $model;
         }
 
-        abort(404, 'Объект не найден');
+        throw new ModelNotFoundException();
+    }
+
+    public function getPaletteImage($version = null)
+    {
+        if (is_null($version)) {
+            return $this->images[$this->version];
+        }
+
+        if (array_key_exists($version, $this->images)) {
+            return $this->images[$version];
+        }
+
+        throw new ImageNotFoundException();
+    }
+
+    public function getPalette($version = null)
+    {
+        if (is_null($version)) {
+            return $this->palette[$this->version];
+        }
+
+        if (array_key_exists($version, $this->palette)) {
+            return $this->palette[$version];
+        }
+
+        throw new ImageNotFoundException();
     }
 
     public function __get($name)
@@ -141,7 +177,7 @@ class ImageModel
 
         if ($handler instanceof HandlerInterface) {
             $result = $handler->createPalette($image);
-            $this->palette = $result['palette'];
+            $this->palette[$this->version] = $result['palette'];
 
             return $result['image'];
         }
@@ -149,22 +185,14 @@ class ImageModel
 
     protected function saveImage(Imagick $image, string $postfix = null)
     {
-        $this->images[$postfix] = $this->getFilepath($postfix, '/media');
-
         Storage::drive('public_media')->put($this->getFilepath($postfix), $image);
+
+        return $this->getFilepath($postfix, '/media');
     }
 
     protected function saveData()
     {
-        $data = [
-            'basename' => $this->basename,
-            'extension' => $this->extension,
-            'filename' => $this->filename,
-            'id' => $this->id,
-            'version' => $this->version,
-            'images' => $this->images,
-            'palette' => $this->palette,
-        ];
+        $data = get_object_vars($this);
 
         Storage::disk('public_media')->put($this->id . '/data.json', json_encode($data));
     }
