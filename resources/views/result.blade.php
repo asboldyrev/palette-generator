@@ -1,30 +1,33 @@
 @extends('index')
 
 @section('result')
-	<div>
-		<div class="image-section">
-			<div class="image-block">
-				<img class="image" src="{{ $image->originalImage }}" alt="Исходное изображение">
-				<p class="description">Исходное изображение</p>
-			</div>
-			<div class="image-block">
-				<img class="image" src="{{ $image->cleanedImage }}" alt="Очищенное изображение">
-				<p class="description">Очищенное изображение</p>
-			</div>
-			<div class="image-block">
-				<img class="image" src="{{ $image->getPaletteImage() }}" alt="Палитра">
-				<p class="description">Палитра</p>
-			</div>
+	<div class="row">
+		<div class="col-6">
+			<figure class="figure">
+				<img class="figure-img img-fluid result-image img-thumbnail rounded" src="{{ $image->originalImage }}" alt="Исходное изображение">
+				<figcaption class="figure-caption">Исходное изображение</figcaption>
+			</figure>
 		</div>
-
-		<div class="color-palette">
-			@foreach ($image->getPalette() as $color)
-				<div class="color-block">
-					<div class="color" style="background-color: #{{ $color }};">
-						<p class="color__code" @if (!light_background($color)) style="color:white;" @endif>#{{ $color }}</p>
+		<div class="col-6">
+			<figure class="figure">
+				<img class="figure-img img-fluid result-image img-thumbnail rounded" src="{{ $image->cleanedImage }}" alt="Очищенное изображение">
+				<figcaption class="figure-caption">Очищенное изображение</figcaption>
+			</figure>
+		</div>
+		<div class="col-6">
+			<figure class="figure">
+				<img class="figure-img img-fluid result-image img-thumbnail rounded" src="{{ $image->getPaletteImage() }}" alt="Палитра">
+				<figcaption class="figure-caption">Палитра</figcaption>
+			</figure>
+		</div>
+		<div class="col-6">
+			<div class="row">
+				@foreach ($image->getPalette() as $color)
+					<div class="col-6 py-4 text-center" style="background-color: #{{ $color }};">
+						<span @if (!light_background($color)) style="color:white;" @endif>#{{ $color }}</span>
 					</div>
-				</div>
-			@endforeach
+				@endforeach
+			</div>
 		</div>
 	</div>
 @endsection

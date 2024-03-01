@@ -9,7 +9,7 @@ class SiteController extends Controller
 {
     public function index()
     {
-        return view('index');
+        return view('index')->with('models', ImageModel::all());
     }
 
     public function store(Request $request)
@@ -30,7 +30,7 @@ class SiteController extends Controller
             return redirect()->route('result', ['id' => $image->id, 'version' => $version]);
         }
 
-        return redirect()->route('result', ['id' => $image->id])->with('models', ImageModel::all());
+        return redirect()->route('result', ['id' => $image->id]);
     }
 
     public function result(string $id, string $version = null)

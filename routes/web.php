@@ -1,26 +1,22 @@
 <?php
 
-/** @var \Laravel\Lumen\Routing\Router $router */
+use App\Http\Controllers\SiteController;
+use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Application Routes
+| Web Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register all of the routes for an application.
-| It is a breeze. Simply tell Lumen the URIs it should respond to
-| and give it the Closure to call when that URI is requested.
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
 |
 */
 
-$router->get('/', 'SiteController@index');
-
-$router->get('result/{id}[/{version}]', [
-    'as' => 'result',
-    'uses' => 'SiteController@result',
-]);
-
-$router->post('/', [
-    'as' => 'store',
-    'uses' => 'SiteController@store',
-]);
+Route::controller(SiteController::class)->group(function (Router $router) {
+    $router->get('/', 'index')->name('index');
+    $router->get('result/{id}/{version?}', 'result')->name('result');
+    $router->post('/', 'store')->name('store');
+});
