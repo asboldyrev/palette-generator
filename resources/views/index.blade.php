@@ -19,6 +19,7 @@
 		<div class="row gx-5">
 			<div class="col-4">
 				<form action="{{ route('store') }}" method="post" enctype="multipart/form-data">
+					<input type="hidden" name="_token" value="{{ csrf_token() }}" />
 					<div class="mb-3">
 						<label for="versionSelect">Алгоритм</label>
 						<select class="form-select" name="version">
