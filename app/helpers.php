@@ -8,3 +8,20 @@ if (! function_exists('light_background')) {
         return Hex::fromString('#' . $hexColor)->toHsl()->lightness() > 50;
     }
 }
+
+if (! function_exists('map')) {
+    function map($value, $fromLow, $fromHigh, $toLow, $toHigh)
+    {
+        $fromRange = $fromHigh - $fromLow;
+        $toRange = $toHigh - $toLow;
+        $scaleFactor = $toRange / $fromRange;
+
+        // Re-zero the value within the from range
+        $tmpValue = $value - $fromLow;
+        // Rescale the value to the to range
+        $tmpValue *= $scaleFactor;
+
+        // Re-zero back to the to range
+        return $tmpValue + $toLow;
+    }
+}

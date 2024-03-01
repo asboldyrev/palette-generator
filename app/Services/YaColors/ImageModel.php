@@ -33,6 +33,26 @@ class ImageModel
 
     protected array $palette;
 
+    public static function all()
+    {
+        $images = collect([]);
+
+        foreach (Storage::disk('public_media')->allDirectories() as $image_id) {
+            $data = Storage::disk('public_media')->json($image_id . '/data.json');
+            $model = new self();
+
+            foreach ($data as $param_name => $param_value) {
+                if (property_exists($model, $param_name)) {
+                    $model->{$param_name} = $param_value;
+                }
+            }
+
+            $images->push($model);
+        }
+
+        return $images;
+    }
+
     public static function create(UploadedFile $file, string $version = 'v1'): self
     {
         $id = Str::uuid();
@@ -70,7 +90,7 @@ class ImageModel
         return $model;
     }
 
-    public static function load(string $id)
+    public static function load(string $id, string $version = null)
     {
         if (Storage::disk('public_media')->exists($id)) {
             $data = Storage::disk('public_media')->json($id . '/data.json');
@@ -82,10 +102,23 @@ class ImageModel
                 }
             }
 
+            if ($version) {
+                $model->version = $version;
+            }
+
             return $model;
         }
 
         throw new ModelNotFoundException();
+    }
+
+    public function update(string $version)
+    {
+        $this->version = $version;
+        $cleaned_image_path = base_path('/public/' . $this->cleanedImage);
+        $cleaned_image = new Imagick($cleaned_image_path);
+        $palette_image = $this->createPalette($cleaned_image);
+        $this->images[$version] = $this->saveImage($palette_image, 'palette-' . $version);
     }
 
     public function getPaletteImage($version = null)
@@ -121,6 +154,23 @@ class ImageModel
         }
 
         throw new Exception('Свойство «' . $name . '» не найдено');
+    }
+
+    public function createPalette(Imagick $image)
+    {
+        $handler_class = match ($this->version) {
+            'v1' => V1::class,
+            'v2' => V2::class,
+        };
+
+        $handler = new $handler_class();
+
+        if ($handler instanceof HandlerInterface) {
+            $result = $handler->createPalette($image);
+            $this->palette[$this->version] = $result['palette'];
+
+            return $result['image'];
+        }
     }
 
     protected function cleanImage(Imagick $image): Imagick
@@ -164,23 +214,6 @@ class ImageModel
         $cleaned_image->importImagePixels(0, 0, $newWidth, $newHeight, 'RGB', Imagick::PIXEL_CHAR, $newPixels);
 
         return $cleaned_image;
-    }
-
-    public function createPalette(Imagick $image)
-    {
-        $handler_class = match ($this->version) {
-            'v1' => V1::class,
-            'v2' => V2::class,
-        };
-
-        $handler = new $handler_class();
-
-        if ($handler instanceof HandlerInterface) {
-            $result = $handler->createPalette($image);
-            $this->palette[$this->version] = $result['palette'];
-
-            return $result['image'];
-        }
     }
 
     protected function saveImage(Imagick $image, string $postfix = null)

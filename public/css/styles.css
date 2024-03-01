@@ -1,6 +1,6 @@
 /* styles.css */
 .container {
-    max-width: 1200px;
+    max-width: 1600px;
     margin: 0 auto;
     padding: 20px;
 }
@@ -8,7 +8,7 @@
 .content {
     display: grid;
     column-gap: 10rem;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
 }
 
 .form {
@@ -71,4 +71,9 @@
 
 img {
     max-width: 200px;
+}
+
+.models__item {
+    margin: 10px 5px;
+    display: block;
 }

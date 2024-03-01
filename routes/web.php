@@ -15,7 +15,7 @@
 
 $router->get('/', 'SiteController@index');
 
-$router->get('result/{id}', [
+$router->get('result/{id}[/{version}]', [
     'as' => 'result',
     'uses' => 'SiteController@result',
 ]);
