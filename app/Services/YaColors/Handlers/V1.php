@@ -3,16 +3,18 @@
 namespace App\Services\YaColors\Handlers;
 
 use App\Services\YaColors\HandlerInterface;
+use App\Services\YaColors\ImageProcessing\ImageFileHandler;
+use App\Services\YaColors\Models\Image;
 use Imagick;
 
 class V1 implements HandlerInterface
 {
-    public function createPalette(Imagick $image): array
+    public function createPalette(Image $image, Imagick $imagick): Image
     {
         $palette = [];
         // Создаём палитру
         $filter = Imagick::FILTER_BOX;
-        $palette_image = clone $image;
+        $palette_image = clone $imagick;
         $palette_image->resizeImage(2, 2, $filter, 0);
 
         $iterator = $palette_image->getPixelIterator();
@@ -32,15 +34,18 @@ class V1 implements HandlerInterface
         }
 
         $palette_image->resizeImage(
-            $image->getImageWidth(),
-            $image->getImageHeight(),
+            $imagick->getImageWidth(),
+            $imagick->getImageHeight(),
             $filter,
             0
         );
 
-        return [
-            'image' => $palette_image,
-            'palette' => $palette,
-        ];
+        $image_path = ImageFileHandler::saveImage($image, $palette_image, 'v1');
+        $image->paths->addPalette('v1', $image_path);
+        $image->addPalette('v1', $palette);
+
+        ImageFileHandler::saveData($image);
+
+        return $image;
     }
 }

@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\YaColors\ImageModel;
+use App\Services\YaColors\Models\Image;
 
 class ImageController extends Controller
 {
     public function list()
     {
-        return view('list')->with('images', ImageModel::all());
+        return view('list')->with('images', Image::all());
     }
 
-    public function show(string $id, string $version = null)
+    public function show(string $id)
     {
-        $image = ImageModel::load($id, $version);
+        $image = Image::find($id);
 
         return view('show')->with('image', $image);
     }
