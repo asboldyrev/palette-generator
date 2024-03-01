@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\SiteController;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
@@ -16,7 +17,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::controller(SiteController::class)->group(function (Router $router) {
-    $router->get('/', 'index')->name('index');
-    $router->get('result/{id}/{version?}', 'result')->name('result');
-    $router->post('/', 'store')->name('store');
+    $router->get('/', 'create')->name('images.create');
+    $router->post('store', 'store')->name('images.store');
+});
+
+Route::controller(ImageController::class)->prefix('result')->group(function (Router $router) {
+    $router->get('/', 'list')->name('images.list');
+    $router->get('{id}/show', 'show')->name('images.show');
 });

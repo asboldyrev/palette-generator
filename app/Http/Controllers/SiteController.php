@@ -7,15 +7,14 @@ use Illuminate\Http\Request;
 
 class SiteController extends Controller
 {
-    public function index()
+    public function create()
     {
-        return view('index')->with('models', ImageModel::all());
+        return view('create');
     }
 
     public function store(Request $request)
     {
         $image_id = $request->input('image');
-        $version = 'v' . $request->input('version');
         $file = $request->file('file');
 
         if ($image_id && !$file) {
@@ -24,19 +23,9 @@ class SiteController extends Controller
             $image = ImageModel::create($file);
         }
 
-        if ($version != $image->version) {
-            $image->update($version);
+        $image->update('v1');
+        $image->update('v2');
 
-            return redirect()->route('result', ['id' => $image->id, 'version' => $version]);
-        }
-
-        return redirect()->route('result', ['id' => $image->id]);
-    }
-
-    public function result(string $id, string $version = null)
-    {
-        $image = ImageModel::load($id, $version);
-
-        return view('result')->with('image', $image)->with('models', ImageModel::all());
+        return redirect()->route('images.show', ['id' => $image->id]);
     }
 }
