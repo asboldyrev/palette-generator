@@ -2,10 +2,6 @@
 
 namespace App\Services\YaColors\Models;
 
-use App\Services\YaColors\Exceptions\ImageNotFoundException;
-use App\Services\YaColors\Exceptions\ModelNotFoundException;
-use App\Services\YaColors\Handlers\V1;
-use App\Services\YaColors\Handlers\V2;
 use App\Services\YaColors\ImageProcessing\ImageFileHandler;
 use App\Services\YaColors\ImageProcessing\PaletteCreator;
 use App\Services\YaColors\Models\FileInfo;
@@ -15,8 +11,6 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Imagick;
-use ImagickPixel;
-use stdClass;
 
 /**
  * @property FileInfo $fileInfo

@@ -3,9 +3,7 @@
 namespace App\Services\YaColors\ImageProcessing;
 
 use App\Services\YaColors\Exceptions\ModelNotFoundException;
-use App\Services\YaColors\Models\FileInfo;
 use App\Services\YaColors\Models\Image;
-use App\Services\YaColors\Models\Paths;
 use Imagick;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;

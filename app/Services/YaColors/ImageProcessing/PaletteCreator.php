@@ -15,7 +15,7 @@ class PaletteCreator
     {
         $handlers = [
             V1::class,
-            // V2::class,
+            V2::class,
         ];
 
         foreach ($handlers as $class_name) {
