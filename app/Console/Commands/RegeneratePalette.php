@@ -12,7 +12,7 @@ class RegeneratePalette extends Command
      *
      * @var string
      */
-    protected $signature = 'app:regenerate-palette';
+    protected $signature = 'app:regenerate-palette {id?}';
 
     /**
      * The console command description.
@@ -26,12 +26,18 @@ class RegeneratePalette extends Command
      */
     public function handle()
     {
-        $images = Image::all();
-
-        /** @var Image $image */
-        foreach ($images as $image) {
+        if ($this->argument('id')) {
+            $image = Image::find($this->argument('id'));
             $image->update();
             $this->info($image->fileInfo->id);
+        } else {
+            $images = Image::all();
+
+            /** @var Image $image */
+            foreach ($images as $image) {
+                $image->update();
+                $this->info($image->fileInfo->id);
+            }
         }
     }
 }
