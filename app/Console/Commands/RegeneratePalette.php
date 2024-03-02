@@ -26,18 +26,18 @@ class RegeneratePalette extends Command
      */
     public function handle()
     {
+
         if ($this->argument('id')) {
             $image = Image::find($this->argument('id'));
-            $image->update();
-            $this->info($image->fileInfo->id);
+            $images = [$image];
         } else {
             $images = Image::all();
+        }
 
-            /** @var Image $image */
-            foreach ($images as $image) {
-                $image->update();
-                $this->info($image->fileInfo->id);
-            }
+        /** @var Image $image */
+        foreach ($images as $image) {
+            $image->update();
+            $this->info($image->fileInfo->id);
         }
     }
 }
