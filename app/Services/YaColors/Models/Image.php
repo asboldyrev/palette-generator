@@ -83,6 +83,14 @@ class Image
         return $model;
     }
 
+    public function update()
+    {
+        $cleaned_image = new Imagick(public_path($this->paths->cleanedImage));
+        PaletteCreator::createPalette($this, $cleaned_image);
+
+        ImageFileHandler::saveData($this);
+    }
+
     public function setFileInfo(FileInfo $fileInfo): self
     {
         $this->fileInfo = $fileInfo;
@@ -106,18 +114,16 @@ class Image
         return [];
     }
 
-    public function setPalette(array $palette): self
+    public function setPalette(string $version, array $palette): self
     {
-        $this->palette = $palette;
+        $this->palette[$version] = $palette;
 
         return $this;
     }
 
-    public function addPalette(string $version, array $palette): self
+    public function addPalette(string $version, string $palette): self
     {
-        if (!key_exists($version, $this->palette)) {
-            $this->palette[$version] = $palette;
-        }
+        $this->palette[$version][] = $palette;
 
         return $this;
     }

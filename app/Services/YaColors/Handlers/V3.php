@@ -11,7 +11,7 @@ use Phpml\Clustering\KMeans;
 use Phpml\Math\Statistic\Mean;
 use Spatie\Color\Rgb;
 
-class V2 implements HandlerInterface
+class V3 implements HandlerInterface
 {
     public function createPalette(Image $image, Imagick $imagick): Image
     {
@@ -33,9 +33,9 @@ class V2 implements HandlerInterface
         $centroids = [];
         foreach ($clusters as $clusterColors) {
             $centroid = [
-                'r' => Mean::median(array_column($clusterColors, 0)),
-                'g' => Mean::median(array_column($clusterColors, 1)),
-                'b' => Mean::median(array_column($clusterColors, 2)),
+                'r' => Mean::mode(array_column($clusterColors, 0)),
+                'g' => Mean::mode(array_column($clusterColors, 1)),
+                'b' => Mean::mode(array_column($clusterColors, 2)),
             ];
             $centroids[] = $centroid;
         }
@@ -65,9 +65,9 @@ class V2 implements HandlerInterface
 
             $x += 100;
         }
-        $image_path = ImageFileHandler::saveImage($image, $palette_image, 'v2');
-        $image->paths->addPalette('v2', $image_path);
-        $image->setPalette('v2', $color_palette);
+        $image_path = ImageFileHandler::saveImage($image, $palette_image, 'v3');
+        $image->paths->addPalette('v3', $image_path);
+        $image->setPalette('v3', $color_palette);
 
         ImageFileHandler::saveData($image);
 

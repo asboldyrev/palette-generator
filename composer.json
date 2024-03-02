@@ -10,6 +10,7 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
+        "php-ai/php-ml": "^0.10.0",
         "spatie/color": "^1.5"
     },
     "require-dev": {

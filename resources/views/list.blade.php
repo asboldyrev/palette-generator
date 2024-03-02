@@ -7,13 +7,15 @@
 				<div class="card">
 					<img class="card-img-top result-image" src="{{ $image->paths->originalImage }}" alt="...">
 
-					<table class="table-sm table-borderless border-top table">
-						<tr>
-							@foreach ($image->getPalette('v1') as $color)
-								<td class="py-3" style="background-color: #{{ $color }};"></td>
-							@endforeach
-						</tr>
-					</table>
+					@foreach ($image->palette as $palette)
+						<table class="table-sm table-borderless border-top mb-0 table">
+							<tr>
+								@foreach ($palette as $color)
+									<td class="py-3" style="background-color: #{{ $color }};"></td>
+								@endforeach
+							</tr>
+						</table>
+					@endforeach
 
 					<div class="card-body">
 						<a class="btn btn-primary" href="{{ route('images.show', ['id' => $image->fileInfo->id]) }}">Посмотреть</a>

@@ -42,7 +42,7 @@ class V1 implements HandlerInterface
 
         $image_path = ImageFileHandler::saveImage($image, $palette_image, 'v1');
         $image->paths->addPalette('v1', $image_path);
-        $image->addPalette('v1', $palette);
+        $image->setPalette('v1', $palette);
 
         ImageFileHandler::saveData($image);
 

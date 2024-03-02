@@ -5,6 +5,7 @@ namespace App\Services\YaColors\ImageProcessing;
 use App\Services\YaColors\HandlerInterface;
 use App\Services\YaColors\Handlers\V1;
 use App\Services\YaColors\Handlers\V2;
+use App\Services\YaColors\Handlers\V3;
 use App\Services\YaColors\Models\Image;
 use Imagick;
 use ImagickPixel;
@@ -16,6 +17,7 @@ class PaletteCreator
         $handlers = [
             V1::class,
             V2::class,
+            V3::class,
         ];
 
         foreach ($handlers as $class_name) {
