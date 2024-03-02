@@ -33,12 +33,7 @@ class V1 implements HandlerInterface
             $iterator->syncIterator();
         }
 
-        $palette_image->resizeImage(
-            $imagick->getImageWidth(),
-            $imagick->getImageHeight(),
-            $filter,
-            0
-        );
+        $palette_image->resizeImage(200, 200, $filter, 0);
 
         $image_path = ImageFileHandler::saveImage($image, $palette_image, 'v1');
         $image->paths->addPalette('v1', $image_path);
