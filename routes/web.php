@@ -25,3 +25,5 @@ Route::controller(ImageController::class)->prefix('result')->group(function (Rou
     $router->get('/', 'list')->name('images.list');
     $router->get('{id}/show', 'show')->name('images.show');
 });
+
+Route::view('versions', 'versions')->name('versions');

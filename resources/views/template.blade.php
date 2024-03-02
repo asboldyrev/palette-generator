@@ -23,7 +23,10 @@
 						<a class="nav-link {{ request()->route()->getName() == 'images.create' ? 'active' : '' }}" aria-current="page" href="{{ route('images.create') }}">Создать палитру</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link {{ request()->route()->getName() == 'images.create' ? '' : 'active' }}" href="{{ route('images.list') }}">Каталог</a>
+						<a class="nav-link {{ !in_array(request()->route()->getName(), ['versions', 'images.create']) ? 'active' : '' }}" href="{{ route('images.list') }}">Каталог</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link {{ request()->route()->getName() == 'versions' ? 'active' : '' }}" href="{{ route('versions') }}">Описание версий</a>
 					</li>
 				</ul>
 			</div>
