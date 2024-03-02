@@ -42,6 +42,13 @@ class Paths
         }
     }
 
+    public function deletePalette(string $version)
+    {
+        if (key_exists($version, $this->paletteImage)) {
+            unset($this->paletteImage[$version]);
+        }
+    }
+
     public function getPaletteImage(string $version): string|null
     {
         if (key_exists($version, $this->paletteImage)) {

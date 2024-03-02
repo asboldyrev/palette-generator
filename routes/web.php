@@ -16,14 +16,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::controller(SiteController::class)->group(function (Router $router) {
-    $router->get('/', 'create')->name('images.create');
-    $router->post('store', 'store')->name('images.store');
-});
-
-Route::controller(ImageController::class)->prefix('result')->group(function (Router $router) {
-    $router->get('/', 'list')->name('images.list');
-    $router->get('{id}/show', 'show')->name('images.show');
-});
+Route
+    ::controller(ImageController::class)
+    ->group(function (Router $router) {
+        $router->get('/', 'list')->name('images.list');
+        $router->get('create', 'create')->name('images.create');
+        $router->post('store', 'store')->name('images.store');
+        $router->get('{id}/show', 'show')->name('images.show');
+        $router->get('{id}/delete', 'delete')->name('images.delete');
+    });
 
 Route::view('versions', 'versions')->name('versions');

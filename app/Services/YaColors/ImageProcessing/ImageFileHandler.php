@@ -48,6 +48,16 @@ class ImageFileHandler
         return null;
     }
 
+    public static function hasImage(Image $image, string $postfix)
+    {
+        return Storage::drive('public_media')->has(self::getFilepath($image, $postfix));
+    }
+
+    public static function deleteImage(Image $image, string $postfix)
+    {
+        return Storage::drive('public_media')->delete(self::getFilepath($image, $postfix));
+    }
+
     public static function saveImage(Image $image, Imagick $imagick, string $postfix = null)
     {
         Storage::drive('public_media')->put(self::getFilepath($image, $postfix), $imagick);
@@ -58,6 +68,11 @@ class ImageFileHandler
     public static function saveData(Image $image)
     {
         Storage::disk('public_media')->put($image->fileInfo->id . '/data.json', serialize($image));
+    }
+
+    public static function deleteData(Image $image)
+    {
+        Storage::disk('public_media')->deleteDirectory($image->fileInfo->id);
     }
 
     public static function getFilepath(Image $image, string $postfix, string $prefix = null)

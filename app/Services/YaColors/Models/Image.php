@@ -88,7 +88,20 @@ class Image
         $cleaned_image = new Imagick(public_path($this->paths->cleanedImage));
         PaletteCreator::createPalette($this, $cleaned_image);
 
+        foreach ($this->paths->paletteImage as $version => $image_path) {
+            if (!ImageFileHandler::hasImage($this, $version)) {
+                ImageFileHandler::deleteImage($this, $version);
+                unset($this->palette[$version]);
+                $this->paths->deletePalette($version);
+            }
+        }
+
         ImageFileHandler::saveData($this);
+    }
+
+    public function delete()
+    {
+        ImageFileHandler::deleteData($this);
     }
 
     public function setFileInfo(FileInfo $fileInfo): self
