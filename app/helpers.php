@@ -2,14 +2,14 @@
 
 use Spatie\Color\Hex;
 
-if (! function_exists('light_background')) {
+if (!function_exists('light_background')) {
     function light_background(string $hexColor)
     {
-        return Hex::fromString('#' . $hexColor)->toHsl()->lightness() > 50;
+        return Hex::fromString('#' . $hexColor)->toCIELab()->l() >= 50;
     }
 }
 
-if (! function_exists('map')) {
+if (!function_exists('map')) {
     function map($value, $fromLow, $fromHigh, $toLow, $toHigh)
     {
         $fromRange = $fromHigh - $fromLow;
