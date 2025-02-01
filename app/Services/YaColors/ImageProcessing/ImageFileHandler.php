@@ -14,7 +14,12 @@ class ImageFileHandler
     {
         $images = collect([]);
 
-        foreach (Storage::disk('public_media')->allDirectories() as $image_id) {
+        $data = collect(Storage::disk('public_media')->allDirectories())
+            ->sortByDesc(function ($file) {
+                return Storage::disk('public_media')->lastModified($file . '/data.json');
+            });
+
+        foreach ($data as $image_id) {
             $images->push(self::loadData($image_id));
         }
 
